@@ -26,18 +26,6 @@ func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprint(w, p.store.GetPlayerScore(player))
 }
 
-func GetPlayerScore(name string) (score string) {
-	if name == "Pepper" {
-		return "20"
-	}
-
-	if name == "Floyd" {
-		return "10"
-	}
-
-	return
-}
-
 func main() {
 	server := &PlayerServer{store: &InMemoryPlayerStore{}}
 	log.Fatal(http.ListenAndServe(":5001", server))
