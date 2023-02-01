@@ -64,7 +64,9 @@ func TestStoreWins(t *testing.T) {
 	server := &PlayerServer{store: &store}
 
 	t.Run("it records wins when POST", func(t *testing.T) {
-		request := newPostWinRequest("Pepper")
+		player := "Pepper"
+
+		request := newPostWinRequest(player)
 		response := httptest.NewRecorder()
 
 		server.ServeHTTP(response, request)
