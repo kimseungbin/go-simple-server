@@ -7,10 +7,17 @@ import (
 	"strings"
 )
 
-func PlayerServer(w http.ResponseWriter, r *http.Request) {
-	player := strings.TrimPrefix(r.URL.Path, "/players/")
+type PlayerStore interface {
+	GetPlayerScore(name string) int
+}
 
-	fmt.Fprintf(w, GetPlayerScore(player))
+type PlayerServer struct {
+	store PlayerStore
+}
+
+func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	player := strings.TrimPrefix(r.URL.Path, "/players/")
+	fmt.Fprint(w, p.store.GetPlayerScore(player))
 }
 
 func GetPlayerScore(name string) (score string) {
@@ -26,6 +33,6 @@ func GetPlayerScore(name string) (score string) {
 }
 
 func main() {
-	handler := http.HandlerFunc(PlayerServer)
-	log.Fatal(http.ListenAndServe(":5001", handler))
+	server := &PlayerServer{}
+	log.Fatal(http.ListenAndServe(":5001", server))
 }
